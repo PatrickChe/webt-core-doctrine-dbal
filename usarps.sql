@@ -21,16 +21,27 @@ CREATE TABLE Match (
 );
 
 INSERT INTO Participant (PK_Participant_ID, First_Name, Last_Name, Nickname)
-VALUES
+VALUES 
+    (1, 'Peter', 'Schulteis', 'Slinghshot'),
+    (2, 'Mark', 'Chironna', 'Cottonwood'),
+    (3, 'Rob', 'Krueger', 'Blue Star'),
+    (4, 'Shannon', 'Johnson', 'The Cannon'),
+    (5, 'Guy', 'Rich', 'Sizzle'),
+    (6, 'Marcus', 'Scimé', 'Lionheart'),
+    (7, 'Craig', 'Hamlin', 'The Monster'),
+    (8, 'Steve', 'Mullins', 'Twinkie'),
+    (9, 'Robert', 'Crawford', 'Dr. Hugenstein'),
+    (10, 'Josh', 'Wellman', 'The Pest');
+
+INSERT INTO `Match` (PK_Match_ID, Participant1, Symbol1, Participant2, Symbol2, Match_Date)
+VALUES 
+    (1, 1, 'Rock', 2, 'Scissors', '2024-03-20 10:00:00'),
+    (2, 3, 'Paper', 4, 'Rock', '2024-03-20 10:15:00'),
+    (3, 5, 'Scissors', 6, 'Paper', '2024-03-20 10:30:00'),
+    (4, 7, 'Rock', 8, 'Scissors', '2024-03-20 10:45:00'),
+    (5, 9, 'Paper', 10, 'Rock', '2024-03-20 11:00:00');VALUES
     (1, 'John', 'Doe', 'Rocky'),
     (2, 'Jane', 'Smith', 'PaperQueen'),
     (3, 'Michael', 'Johnson', 'ScissorsMaster'),
     (4, 'Emily', 'Brown', 'RockStar');
-
-INSERT INTO Match (PK_Match_ID, Participant1, Symbol1, Participant2, Symbol2, Match_Date)
-VALUES
-    (1, 1, 'Rock', 2, 'Scissors', '2008-06-01 10:00:00'),
-    (2, 3, 'Paper', 4, 'Rock', '2008-06-02 11:30:00'),
-    (3, 1, 'Scissors', 3, 'Paper', '2008-06-03 09:45:00'),
-    (4, 2, 'Rock', 4, 'Paper', '2008-06-04 13:15:00');
 
