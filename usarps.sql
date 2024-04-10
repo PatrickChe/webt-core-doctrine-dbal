@@ -40,8 +40,3 @@ VALUES
     (3, 5, 'Scissors', 6, 'Paper', '2024-03-20 10:30:00'),
     (4, 7, 'Rock', 8, 'Scissors', '2024-03-20 10:45:00'),
     (5, 9, 'Paper', 10, 'Rock', '2024-03-20 11:00:00');VALUES
-    (1, 'John', 'Doe', 'Rocky'),
-    (2, 'Jane', 'Smith', 'PaperQueen'),
-    (3, 'Michael', 'Johnson', 'ScissorsMaster'),
-    (4, 'Emily', 'Brown', 'RockStar');
-
