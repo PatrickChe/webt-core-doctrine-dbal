@@ -11,11 +11,13 @@ CREATE TABLE Participant (
     Nickname VARCHAR(50)
 );
 
-CREATE TABLE Match (
+CREATE TABLE Game (
     PK_Match_ID INT PRIMARY KEY,
     Participant1 INT NOT NULL,
     Symbol1 ENUM('Rock', 'Paper', 'Scissors') NOT NULL,
+    Constrain FOREIGN KEY (Participant1) REFERENCES Participant (PK_Participant_ID)
     Participant2 INT NOT NULL,
+    Constrain FOREIGN KEY (Participant2) REFERENCES Participant (PK_Participant_ID)
     Symbol2 ENUM('Rock', 'Paper', 'Scissors') NOT NULL,
     Match_Date DATETIME
 );
@@ -33,7 +35,7 @@ VALUES
     (9, 'Robert', 'Crawford', 'Dr. Hugenstein'),
     (10, 'Josh', 'Wellman', 'The Pest');
 
-INSERT INTO `Match` (PK_Match_ID, Participant1, Symbol1, Participant2, Symbol2, Match_Date)
+INSERT INTO Game (PK_Match_ID, Participant1, Symbol1, Participant2, Symbol2, Match_Date)
 VALUES 
     (1, 1, 'Rock', 2, 'Scissors', '2024-03-20 10:00:00'),
     (2, 3, 'Paper', 4, 'Rock', '2024-03-20 10:15:00'),
