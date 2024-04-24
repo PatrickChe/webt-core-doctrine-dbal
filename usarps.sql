@@ -16,8 +16,10 @@ CREATE TABLE Participant (
 CREATE TABLE Game (
     PK_Match_ID INT PRIMARY KEY,
     Participant1 INT NOT NULL,
+    FOREIGN KEY (Participant1) REFERENCES Participant (PK_Participant_ID),
     Symbol1 ENUM('Rock', 'Paper', 'Scissors') NOT NULL,
     Participant2 INT NOT NULL,
+    FOREIGN KEY (Participant2) REFERENCES Participant (PK_Participant_ID),
     Symbol2 ENUM('Rock', 'Paper', 'Scissors') NOT NULL,
     Match_Date DATETIME
 );
@@ -42,4 +44,8 @@ VALUES
     (3, 5, 'Scissors', 6, 'Paper', '2024-03-20 10:30:00'),
     (4, 7, 'Rock', 8, 'Scissors', '2024-03-20 10:45:00'),
     (5, 9, 'Paper', 10, 'Rock', '2024-03-20 11:00:00');
+
+SELECT * FROM Game
+JOIN Participant P1 on P1.PK_Participant_ID = Game.Participant1
+JOIN Participant P2 on P2.PK_Participant_ID = Game.Participant2;
 
