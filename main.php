@@ -5,7 +5,7 @@ use Doctrine\DBAL\DriverManager;
 
 $connectionParams = [
     'dbname' => 'usarps',
-    'user' => 'user',
+    'user' => 'root',
     'password' => '',
     'host' => 'localhost',
     'driver' => 'pdo_mysql',
@@ -13,5 +13,9 @@ $connectionParams = [
 
 $conn = DriverManager::getConnection($connectionParams);
 
-$sql = "SELECT * FROM match";
-$stmt = $conn->query($sql);
+$sql = "SELECT * FROM Game";
+$stmt = $conn->executeQuery($sql);
+
+while (($row = $stmt->fetchAssociative()) !== false) {
+    echo $row['Match_Date'];
+}
