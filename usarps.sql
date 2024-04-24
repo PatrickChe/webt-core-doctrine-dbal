@@ -15,10 +15,10 @@ CREATE TABLE Game (
     PK_Match_ID INT PRIMARY KEY,
     Participant1 INT NOT NULL,
     Symbol1 ENUM('Rock', 'Paper', 'Scissors') NOT NULL,
-    Constrain FOREIGN KEY (Participant1) REFERENCES Participant (PK_Participant_ID)
     Participant2 INT NOT NULL,
-    Constrain FOREIGN KEY (Participant2) REFERENCES Participant (PK_Participant_ID)
     Symbol2 ENUM('Rock', 'Paper', 'Scissors') NOT NULL,
+    FOREIGN KEY (Participant1) REFERENCES Participant (PK_Participant_ID),
+    FOREIGN KEY (Participant2) REFERENCES Participant (PK_Participant_ID),
     Match_Date DATETIME
 );
 
