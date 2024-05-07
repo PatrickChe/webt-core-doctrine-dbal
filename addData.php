@@ -83,60 +83,71 @@ echo <<<HT
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Entry Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+<body class="bg-gray-100 p-4">
+    <h2 class="text-2xl font-bold mb-4 text-center">Add Participant</h2>
+    <form method="post" class="max-w-md mx-auto">
+        <label for="firstName" class="block mb-2">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
 
-<body>
-    <h2>Add Participant</h2>
-    <form method="post">
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" required><br><br>
+        <label for="lastName" class="block mb-2">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
 
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" required><br><br>
+        <label for="nickname" class="block mb-2">Nickname:</label>
+        <input type="text" id="nickname" name="nickname" required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
 
-        <label for="nickname">Nickname:</label>
-        <input type="text" id="nickname" name="nickname" required><br><br>
-
-        <input type="submit" name="addParticipant" value="Add Participant">
+        <input type="submit" name="addParticipant" value="Add Participant"
+            class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
     </form>
 
-    <h2>Add Game</h2>
-    <form method="post">
-        <label for="participant1">Participant 1:</label>
-        <select id="participant1" name="participant1" required>
+    <h2 class="text-2xl font-bold mt-8 mb-4 text-center">Add Game</h2>
+    <form method="post" class="max-w-md mx-auto">
+        <label for="participant1" class="block mb-2">Participant 1:</label>
+        <select id="participant1" name="participant1" required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
             <option value="">Select Participant</option>
             $options
-        </select><br><br>
+        </select>
 
-        <label for="symbol1">Symbol 1:</label>
-        <select id="symbol1" name="symbol1" required>
+        <label for="symbol1" class="block mb-2">Symbol 1:</label>
+        <select id="symbol1" name="symbol1" required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
             <option value="">Select Symbol</option>
             <option value="Rock">Rock</option>
             <option value="Paper">Paper</option>
             <option value="Scissors">Scissors</option>
-        </select><br><br>
+        </select>
 
-        <label for="participant2">Participant 2:</label>
-        <select id="participant2" name="participant2" required>
+        <label for="participant2" class="block mb-2">Participant 2:</label>
+        <select id="participant2" name="participant2" required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
             <option value="">Select Participant</option>
             $options
-        </select><br><br>
+        </select>
 
-        <label for="symbol2">Symbol 2:</label>
-        <select id="symbol2" name="symbol2" required>
+        <label for="symbol2" class="block mb-2">Symbol 2:</label>
+        <select id="symbol2" name="symbol2" required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
             <option value="">Select Symbol</option>
             <option value="Rock">Rock</option>
             <option value="Paper">Paper</option>
             <option value="Scissors">Scissors</option>
-        </select><br><br>
+        </select>
 
-        <label for="matchDate">Match Date:</label>
-        <input type="datetime-local" id="matchDate" name="matchDate" required><br><br>
+        <label for="matchDate" class="block mb-2">Match Date:</label>
+        <input type="datetime-local" id="matchDate" name="matchDate" required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
 
-        <input type="submit" name="addGame" value="Add Game">
+        <input type="submit" name="addGame" value="Add Game"
+            class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
     </form>
+
 </body>
 
 </html>
+
 HT;
-?>
