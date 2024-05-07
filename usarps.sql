@@ -49,3 +49,9 @@ SELECT * FROM Game
 JOIN Participant P1 on P1.PK_Participant_ID = Game.Participant1
 JOIN Participant P2 on P2.PK_Participant_ID = Game.Participant2;
 
+SELECT COUNT(PK_Participant_ID)
+FROM Participant;
+
+SELECT COUNT(PK_Match_ID)
+FROM Game;
+

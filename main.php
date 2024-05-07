@@ -12,14 +12,16 @@ $connectionParams = [
 ];
 
 $conn = DriverManager::getConnection($connectionParams);
+$queryBuilder = $conn->createQueryBuilder();
 
-$sql = "SELECT Game.*, P1.First_Name AS P1_First_Name, P2.First_Name AS P2_First_Name, P1.Nickname AS P1_Nickname, P2.Nickname AS P2_Nickname, P1.Last_Name AS P1_Last_Name, P2.Last_Name AS P2_Last_Name
-        FROM Game
-        JOIN Participant P1 ON P1.PK_Participant_ID = Game.Participant1
-        JOIN Participant P2 ON P2.PK_Participant_ID = Game.Participant2";
+$queryBuilder
+    ->select('Game.*', 'P1.First_Name AS P1_First_Name', 'P2.First_Name AS P2_First_Name', 'P1.Nickname AS P1_Nickname', 'P2.Nickname AS P2_Nickname', 'P1.Last_Name AS P1_Last_Name', 'P2.Last_Name AS P2_Last_Name')
+    ->from('Game')
+    ->join('Game', 'Participant', 'P1', 'Game.Participant1 = P1.PK_Participant_ID')
+    ->join('Game', 'Participant', 'P2', 'Game.Participant2 = P2.PK_Participant_ID');
 
-$stmt = $conn->executeQuery($sql);
-
+$stmt = $conn->executeQuery($queryBuilder);
+$results = $stmt->fetchAllAssociative();
 
 $htmlTemplateGame = file_get_contents('game.html');
 $htmlTemplate = file_get_contents('matches.html');
@@ -28,7 +30,7 @@ $htmlOut = '';
 $htmlFin = '';
 $i = 0;
 
-while (($row = $stmt->fetchAssociative()) !== false) {
+foreach ($results as $row) {
     $html = $htmlTemplateGame;
     $i++;
     $html = str_replace("{round}", $i, $html);
@@ -43,3 +45,4 @@ while (($row = $stmt->fetchAssociative()) !== false) {
 $htmlFin = $htmlTemplate;
 $htmlFin = str_replace("{matches}", $htmlOut, $htmlFin);
 echo $htmlFin;
+?>
