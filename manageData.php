@@ -26,10 +26,10 @@ while (($row = $stmt->fetchAssociative()) !== false) {
 }
 
 $queryBuilder
-    ->select('DISTINCT Game.PK_Match_ID', 'P1.Nickname AS P1_Nickname', 'P2.Nickname AS P2_Nickname')
-    ->from('Game')
-    ->join('Game', 'Participant', 'P1', 'P1.PK_Participant_ID = Game.Participant1')
-    ->join('Game', 'Participant', 'P2', 'P2.PK_Participant_ID = Game.Participant2');
+    ->select('DISTINCT g.PK_Match_ID', 'P1.Nickname AS P1_Nickname', 'P2.Nickname AS P2_Nickname')
+    ->from('Game', 'g')
+    ->join('g', 'Participant', 'P1', 'P1.PK_Participant_ID = g.Participant1', 'P1')
+    ->join('g', 'Participant', 'P2', 'P2.PK_Participant_ID = g.Participant2', 'P2');
 
 
 $stmt = $conn->executeQuery($queryBuilder);
@@ -44,8 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $lastName = $_POST['lastName'];
         $nickname = $_POST['nickname'];
 
-        $queryBuilder->select('COUNT(PK_Participant_ID)')
+        $queryBuilder
+            ->select('COUNT(Participant.PK_Participant_ID)')
             ->from('Participant');
+
 
         $stmt = $conn->executeQuery($queryBuilder);
         $count = $stmt->fetchOne();
@@ -67,7 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $symbol2 = $_POST['symbol2'];
         $matchDate = $_POST['matchDate'];
 
-        $queryBuilder->select('COUNT(PK_Match_ID)')
+        $queryBuilder
+            ->select('COUNT(Game.PK_Match_ID)')
             ->from('Game');
 
         $stmt = $conn->executeQuery($queryBuilder);
@@ -178,24 +181,28 @@ echo <<<HT
         <input type="submit" name="addGame" value="Add Game"
             class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
     </form>
-    <h2>Delete Participant</h2>
-    <form method="post">
-        <label for="participantToDelete">Select Participant to Delete:</label>
-        <select id="participantToDelete" name="participantId" required>
+    <h2 class="text-2xl font-bold mb-4 text-center mt-4">Delete Participant</h2>
+    <form method="post" class="max-w-md mx-auto">
+        <label for="participantToDelete" class="block mb-2">Select Participant to Delete:</label>
+        <select id="participantToDelete" name="participantId" required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
             <option value="">Select Participant</option>
             $options
-        </select><br><br>
-        <input type="submit" name="deleteParticipant" value="Delete Participant">
+        </select>
+        <input type="submit" name="deleteParticipant" value="Delete Participant"
+            class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300">
     </form>
 
-    <h2>Delete Game</h2>
-    <form method="post">
-        <label for="gameToDelete">Select Game to Delete:</label>
-        <select id="gameToDelete" name="gameId" required>
+    <h2 class="text-2xl font-bold mt-8 mb-4 text-center">Delete Game</h2>
+    <form method="post" class="max-w-md mx-auto">
+        <label for="gameToDelete" class="block mb-2">Select Game to Delete:</label>
+        <select id="gameToDelete" name="gameId" required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
             <option value="">Select Game</option>
             $games
-        </select><br><br>
-        <input type="submit" name="deleteGame" value="Delete Game">
+        </select>
+        <input type="submit" name="deleteGame" value="Delete Game"
+        class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300">
     </form>
 </body>
 
