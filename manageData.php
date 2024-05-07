@@ -62,6 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ]);
 
         $conn->executeStatement($queryBuilder);
+
+        header('Location: manageData.php');
+        exit();
     } elseif (isset($_POST['addGame'])) {
         $participant1 = $_POST['participant1'];
         $symbol1 = $_POST['symbol1'];
@@ -88,6 +91,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ]);
 
         $conn->executeStatement($queryBuilder);
+
+        header('Location: manageData.php');
+        exit();
     } elseif (isset($_POST['deleteParticipant'])) {
         $participantId = $_POST['participantId'];
         try {
