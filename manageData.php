@@ -25,6 +25,19 @@ while (($row = $stmt->fetchAssociative()) !== false) {
     $options .= "<option value=\"{$row['PK_Participant_ID']}\">{$row['First_Name']} {$row['Last_Name']} ({$row['Nickname']})</option>";
 }
 
+$queryBuilder
+    ->select('DISTINCT Game.PK_Match_ID', 'P1.Nickname AS P1_Nickname', 'P2.Nickname AS P2_Nickname')
+    ->from('Game')
+    ->join('Game', 'Participant', 'P1', 'P1.PK_Participant_ID = Game.Participant1')
+    ->join('Game', 'Participant', 'P2', 'P2.PK_Participant_ID = Game.Participant2');
+
+
+$stmt = $conn->executeQuery($queryBuilder);
+$games = '';
+while (($row = $stmt->fetchAssociative()) !== false) {
+    $games .= "<option value=\"{$row['PK_Match_ID']}\">{$row['P1_Nickname']} vs {$row['P2_Nickname']}</option>";
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['addParticipant'])) {
         $firstName = $_POST['firstName'];
@@ -70,6 +83,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'Symbol2' => $queryBuilder->expr()->literal($symbol2),
                 'Match_Date' => $queryBuilder->expr()->literal($matchDate)
             ]);
+
+        $conn->executeStatement($queryBuilder);
+    } elseif (isset($_POST['deleteParticipant'])) {
+        $participantId = $_POST['participantId'];
+        try {
+            $queryBuilder
+                ->delete('Participant')
+                ->where('PK_Participant_ID = ' . $participantId);
+
+            $conn->executeStatement($queryBuilder);
+        } catch (Exception $e) {
+            echo "Der Spieler kann nicht gelöscht werden, da er in einem Spiel involviert ist.";
+        }
+    } elseif (isset($_POST['deleteGame'])) {
+        $gameId = $_POST['gameId'];
+
+        $queryBuilder
+            ->delete('Game')
+            ->where('PK_Match_ID = ' . $gameId)
+            ->setParameter('id', $gameId);
 
         $conn->executeStatement($queryBuilder);
     }
@@ -134,6 +167,25 @@ echo <<<HT
         <input type="datetime-local" id="matchDate" name="matchDate" required><br><br>
 
         <input type="submit" name="addGame" value="Add Game">
+    </form>
+    <h2>Delete Participant</h2>
+    <form method="post">
+        <label for="participantToDelete">Select Participant to Delete:</label>
+        <select id="participantToDelete" name="participantId" required>
+            <option value="">Select Participant</option>
+            $options
+        </select><br><br>
+        <input type="submit" name="deleteParticipant" value="Delete Participant">
+    </form>
+
+    <h2>Delete Game</h2>
+    <form method="post">
+        <label for="gameToDelete">Select Game to Delete:</label>
+        <select id="gameToDelete" name="gameId" required>
+            <option value="">Select Game</option>
+            $games
+        </select><br><br>
+        <input type="submit" name="deleteGame" value="Delete Game">
     </form>
 </body>
 
