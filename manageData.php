@@ -3,6 +3,7 @@ require_once 'vendor/autoload.php';
 
 use Doctrine\DBAL\DriverManager;
 
+// Database connection parameters
 $connectionParams = [
     'dbname' => 'usarps',
     'user' => 'root',
@@ -11,47 +12,56 @@ $connectionParams = [
     'driver' => 'pdo_mysql',
 ];
 
+// Establishing database connection
 $conn = DriverManager::getConnection($connectionParams);
 $queryBuilder = $conn->createQueryBuilder();
 
+// Selecting all participants from the database
 $queryBuilder
     ->select('*')
     ->from('Participant');
 
 $stmt = $conn->executeQuery($queryBuilder);
 
+// Generating options for participant dropdown list
 $options = '';
 while (($row = $stmt->fetchAssociative()) !== false) {
     $options .= "<option value=\"{$row['PK_Participant_ID']}\">{$row['First_Name']} {$row['Last_Name']} ({$row['Nickname']})</option>";
 }
 
+// Selecting distinct games from the database
 $queryBuilder
     ->select('DISTINCT g.PK_Match_ID', 'P1.Nickname AS P1_Nickname', 'P2.Nickname AS P2_Nickname')
     ->from('Game', 'g')
     ->join('g', 'Participant', 'P1', 'P1.PK_Participant_ID = g.Participant1', 'P1')
     ->join('g', 'Participant', 'P2', 'P2.PK_Participant_ID = g.Participant2', 'P2');
 
-
 $stmt = $conn->executeQuery($queryBuilder);
+
+// Generating options for game dropdown list
 $games = '';
 while (($row = $stmt->fetchAssociative()) !== false) {
     $games .= "<option value=\"{$row['PK_Match_ID']}\">{$row['P1_Nickname']} vs {$row['P2_Nickname']}</option>";
 }
 
+// Handling form submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['addParticipant'])) {
+        // Adding a new participant
         $firstName = $_POST['firstName'];
         $lastName = $_POST['lastName'];
         $nickname = $_POST['nickname'];
 
+        // Counting existing participants
         $queryBuilder
             ->select('COUNT(Participant.PK_Participant_ID)')
             ->from('Participant');
 
-
         $stmt = $conn->executeQuery($queryBuilder);
         $count = $stmt->fetchOne();
 
+        // Inserting new participant into the database
+        // Using expr()->literal() for correct formating in the INSERT query and prevention of sql-injection attacks.
         $queryBuilder
             ->insert('Participant')
             ->values([
@@ -66,12 +76,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header('Location: manageData.php');
         exit();
     } elseif (isset($_POST['addGame'])) {
+        // Adding a new game
         $participant1 = $_POST['participant1'];
         $symbol1 = $_POST['symbol1'];
         $participant2 = $_POST['participant2'];
         $symbol2 = $_POST['symbol2'];
         $matchDate = $_POST['matchDate'];
 
+        // Counting existing games
         $queryBuilder
             ->select('COUNT(Game.PK_Match_ID)')
             ->from('Game');
@@ -79,6 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->executeQuery($queryBuilder);
         $count = $stmt->fetchOne();
 
+        // Inserting new game into the database
         $queryBuilder
             ->insert('Game')
             ->values([
@@ -95,6 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header('Location: manageData.php');
         exit();
     } elseif (isset($_POST['deleteParticipant'])) {
+        // Deleting a participant
         $participantId = $_POST['participantId'];
         try {
             $queryBuilder
@@ -102,10 +116,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ->where('PK_Participant_ID = ' . $participantId);
 
             $conn->executeStatement($queryBuilder);
+            header('Location: manageData.php');
+            exit();
         } catch (Exception $e) {
             echo "Der Spieler kann nicht gelöscht werden, da er in einem Spiel involviert ist.";
         }
     } elseif (isset($_POST['deleteGame'])) {
+        // Deleting a game
         $gameId = $_POST['gameId'];
 
         $queryBuilder
@@ -114,6 +131,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ->setParameter('id', $gameId);
 
         $conn->executeStatement($queryBuilder);
+        header('Location: manageData.php');
+        exit();
     }
 }
 
@@ -211,7 +230,5 @@ echo <<<HT
         class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300">
     </form>
 </body>
-
 </html>
-
 HT;

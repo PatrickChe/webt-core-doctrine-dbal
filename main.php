@@ -3,6 +3,7 @@ require_once 'vendor/autoload.php';
 
 use Doctrine\DBAL\DriverManager;
 
+// Database connection parameters
 $connectionParams = [
     'dbname' => 'usarps',
     'user' => 'root',
@@ -11,9 +12,11 @@ $connectionParams = [
     'driver' => 'pdo_mysql',
 ];
 
+// Establishing database connection
 $conn = DriverManager::getConnection($connectionParams);
 $queryBuilder = $conn->createQueryBuilder();
 
+// Building query to fetch game data along with participant details
 $queryBuilder
     ->select('Game.*', 'P1.First_Name AS P1_First_Name', 'P2.First_Name AS P2_First_Name', 'P1.Nickname AS P1_Nickname', 'P2.Nickname AS P2_Nickname', 'P1.Last_Name AS P1_Last_Name', 'P2.Last_Name AS P2_Last_Name')
     ->from('Game')
@@ -23,6 +26,7 @@ $queryBuilder
 $stmt = $conn->executeQuery($queryBuilder);
 $results = $stmt->fetchAllAssociative();
 
+// Loading HTML templates
 $htmlTemplateGame = file_get_contents('game.html');
 $htmlTemplate = file_get_contents('matches.html');
 
@@ -30,6 +34,7 @@ $htmlOut = '';
 $htmlFin = '';
 $i = 0;
 
+// Generating HTML output for each game
 foreach ($results as $row) {
     $html = $htmlTemplateGame;
     $i++;
@@ -42,7 +47,10 @@ foreach ($results as $row) {
     $htmlOut .= $html;
 }
 
+// Combining HTML templates and generated game HTML to create final output
 $htmlFin = $htmlTemplate;
 $htmlFin = str_replace("{matches}", $htmlOut, $htmlFin);
+
+// Outputting the final HTML
 echo $htmlFin;
 ?>
